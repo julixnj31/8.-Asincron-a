@@ -2,21 +2,21 @@
 
 function tomarDatos(callback) {
   setTimeout(() => {
-    console.log("Tomando datos");
+    console.log("Tomando datos...");
     callback();
   }, 1000);
 }
 
 function procesarDatos(callback) {
   setTimeout(() => {
-    console.log("Procesando datos");
+    console.log("Procesando datos...");
     callback();
   }, 1000);
 }
 
 function mostrarResultado(callback) {
   setTimeout(() => {
-    console.log("Mostrando resultado");
+    console.log("Mostrando resultado...");
     callback();
   }, 1000);
 }
