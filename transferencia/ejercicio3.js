@@ -1,69 +1,44 @@
-// Datos de entrada
-const usuario = {
-  correo: "test@mail.com",
-  documento: "12345",
-  nombre: "Selena"
-};
-
-// Funciones simuladas (servicios externos)
 function validarCorreo(correo) {
-  return new Promise((resolve, reject) => {
-    const tiempo = 1000;
+  return new Promise((res, rej) => {
     setTimeout(() => {
-      const ok = Math.random() > 0.2;
-      ok ? resolve("Correo válido") : reject("Correo inválido");
-    }, tiempo);
+      correo.includes("@") ? res("OK") : rej("Correo inválido");
+    }, 1000);
   });
 }
 
 function validarDocumento(doc) {
-  return new Promise((resolve, reject) => {
-    const tiempo = 1500;
+  return new Promise((res, rej) => {
     setTimeout(() => {
-      const ok = Math.random() > 0.2;
-      ok ? resolve("Documento válido") : reject("Documento inválido");
-    }, tiempo);
+      doc.length > 4 ? res("OK") : rej("Documento inválido");
+    }, 1500);
   });
 }
 
 function validarUsuario(nombre) {
-  return new Promise((resolve, reject) => {
-    const tiempo = 1200;
+  return new Promise((res, rej) => {
     setTimeout(() => {
-      const ok = Math.random() > 0.2;
-      ok ? resolve("Usuario disponible") : reject("Usuario no disponible");
-    }, tiempo);
+      nombre !== "admin" ? res("OK") : rej("Usuario ocupado");
+    }, 2000);
   });
 }
 
-// Proceso principal
-async function validarFormulario() {
-  console.log("Iniciando validación...");
+export async function validarFormulario(user) {
+
   const inicio = Date.now();
 
   const resultados = await Promise.allSettled([
-    validarCorreo(usuario.correo),
-    validarDocumento(usuario.documento),
-    validarUsuario(usuario.nombre)
+    validarCorreo(user.correo),
+    validarDocumento(user.documento),
+    validarUsuario(user.nombre)
   ]);
 
-  // Consolidar resultados
-  const estado = {
-    correo: resultados[0],
-    documento: resultados[1],
-    usuario: resultados[2]
-  };
-
-  console.log("Resultados individuales:", estado);
-
-  // Verificar si todos fueron exitosos
-  const todoOk = resultados.every(r => r.status === "fulfilled");
-
   const fin = Date.now();
-  const tiempoTotal = (fin - inicio) / 1000;
 
-  console.log("Resultado final:", todoOk ? "Formulario validado" : "Validación fallida");
-  console.log("Tiempo total:", tiempoTotal + "s");
+  return {
+    resultados,
+    estadoFinal: resultados.every(r => r.status === "fulfilled")
+      ? "Formulario válido"
+      : "Formulario inválido",
+    tiempo: `${(fin - inicio) / 1000}s`
+  };
 }
-
-validarFormulario();

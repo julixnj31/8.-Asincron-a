@@ -1,33 +1,25 @@
-// Aquí simulo una cola de atención donde cada usuario se atiende uno por uno
-// Cada uno tiene un tiempo diferente y toca esperar a que termine el anterior
-// Esto muestra cómo controlar la asincronía sin que todo se ejecute al tiempo
+export async function gestionarCola(usuarios) {
 
-const solicitudes = [
-    { usuario: "Ana", tiempo: 2000 },
-    { usuario: "Luis", tiempo: 1500 },
-    { usuario: "María", tiempo: 2500 }
-];
+  const inicio = Date.now();
+  const orden = [];
 
-async function atender() {
-    console.log("Inicio del proceso");
+  for (const usuario of usuarios) {
 
-    let inicioTotal = Date.now();
+    console.log(`Atendiendo a ${usuario.nombre}...`);
 
-    for (let s of solicitudes) {
-        console.log(`Atendiendo a ${s.usuario}`);
+    await new Promise(resolve => {
+      setTimeout(() => {
+        orden.push(usuario.nombre);
+        resolve();
+      }, usuario.tiempo);
+    });
 
-        let inicio = Date.now();
+  }
 
-        await new Promise(resolve => setTimeout(resolve, s.tiempo));
+  const fin = Date.now();
 
-        let fin = Date.now();
-
-        console.log(`Finalizó ${s.usuario} en ${(fin - inicio) / 1000} segundos`);
-    }
-
-    let finTotal = Date.now();
-
-    console.log(`Tiempo total: ${(finTotal - inicioTotal) / 1000} segundos`);
+  return {
+    ordenAtencion: orden,
+    tiempoTotal: `${(fin - inicio) / 1000}s`
+  };
 }
-
-atender();

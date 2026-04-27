@@ -1,24 +1,26 @@
-// Ejercicio 7 - Async/Await
+// Función que retorna una promesa (simula algo que tarda 2 segundos)
+function esperarResultado() {
+  return new Promise((resolve) => {
 
-function esperar() {
-  return new Promise(res => {
+    // Simulo un proceso lento (como una API o base de datos)
     setTimeout(() => {
-      res("Resultado listo");
+      resolve("✅ Resultado recibido después de 2 segundos");
     }, 2000);
+
   });
 }
 
-async function ejecutar() {
-  console.log("Esperando...");
 
-  const resultado = await esperar();
+// Función async que usa await
+export async function ejecutarAsyncAwait() {
 
+  console.log("⏳ Esperando resultado...");
+
+  // await pausa esta línea hasta que la promesa se resuelva
+  const resultado = await esperarResultado();
+
+  // Se ejecuta después de los 2 segundos
   console.log(resultado);
+
+  console.log("🚀 El programa continúa sin bloquearse");
 }
-
-ejecutar();
-
-/*
-La asincronía ocurre en setTimeout.
-await espera el resultado sin bloquear el programa.
-*/
